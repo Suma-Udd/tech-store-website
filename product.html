@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pear Buds Pro — Pear</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ── Image gallery thumbnails ── */
+    .gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .gallery-main {
+      background: var(--accent-light);
+      border-radius: 24px;
+      height: 440px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Shine effect that slides across on hover */
+    .gallery-main::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        120deg,
+        transparent 30%,
+        rgba(255,255,255,0.25) 50%,
+        transparent 70%
+      );
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+    .gallery-main:hover::after {
+      transform: translateX(100%); /* slides the shine across */
+    }
+
+    .gallery-thumbs {
+      display: flex;
+      gap: 12px;
+    }
+
+    .thumb {
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+
+    /* Active/selected thumbnail */
+    .thumb.active,
+    .thumb:hover {
+      border-color: var(--accent);
+      transform: scale(1.05);
+    }
+
+    /* ── Color swatches ── */
+    .color-options {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .color-swatch {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 3px solid transparent;
+      transition: border-color var(--transition), transform var(--transition);
+    }
+    .color-swatch.active,
+    .color-swatch:hover {
+      border-color: var(--text);
+      transform: scale(1.1);
+    }
+
+    /* ── Reviews section ── */
+    .reviews-section {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .review-card {
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .review-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .review-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .review-date {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .review-stars {
+      color: #f4b400;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+    }
+
+    .review-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* ── Related products strip ── */
+    .related-strip {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;       /* scroll horizontally if too wide */
+      padding-bottom: 16px;
+      scrollbar-width: thin;  /* thinner scrollbar on Firefox */
+    }
+
+    .related-card {
+      flex-shrink: 0;        /* don't shrink, keep original size */
+      width: 200px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .related-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .related-img {
+      height: 130px;
+      background: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .related-body {
+      padding: 14px;
+    }
+
+    .related-name {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .related-price {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <a href="index.html" class="nav-logo">Pear 🍐</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a href="cart.html" class="nav-cart" aria-label="View cart">
+      🛒
+      <span class="cart-count" id="cart-count">0</span>
+    </a>
+  </nav>
+
+
+  <!-- ── Breadcrumb navigation ── -->
+  <div style="padding: 120px 5% 0; font-size: 0.82rem; color: var(--text-muted);">
+    <a href="index.html" style="color: var(--text-muted);">Home</a>
+    <span style="margin: 0 8px;">›</span>
+    <a href="products.html" style="color: var(--text-muted);">Products</a>
+    <span style="margin: 0 8px;">›</span>
+    <span>Pear Buds Pro</span>
+  </div>
+
+
+  <!-- ── PRODUCT DETAIL LAYOUT ── -->
+  <div class="product-detail container" style="padding-top: 40px;">
+
+    <!-- Left: Image Gallery -->
+    <div class="gallery reveal">
+
+      <!-- Main big image -->
+      <div class="gallery-main" id="main-image">🎧</div>
+
+      <!-- Thumbnail row — clicking changes the main image -->
+      <div class="gallery-thumbs">
+        <div class="thumb active" onclick="setImage(this, '🎧')">🎧</div>
+        <div class="thumb" onclick="setImage(this, '🎵')">🎵</div>
+        <div class="thumb" onclick="setImage(this, '📦')">📦</div>
+        <div class="thumb" onclick="setImage(this, '⚡')">⚡</div>
+      </div>
+    </div>
+
+    <!-- Right: Product Info -->
+    <div class="product-detail-info reveal reveal-delay-2">
+
+      <p class="product-detail-category">Audio · Wireless</p>
+      <h1 class="product-detail-name">Pear Buds Pro</h1>
+      <p class="product-detail-price">€249</p>
+
+      <p class="product-detail-desc">
+        Studio-grade sound in the smallest package we've ever made.
+        Active noise cancellation that adapts to your environment in real-time.
+        36-hour battery with the case. Water resistant. Transparent mode for
+        staying aware. It's the last pair of earbuds you'll ever need.
+      </p>
+
+      <!-- Color picker -->
+      <p style="font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; color: var(--text-muted);">
+        Color — <span id="color-label">Midnight</span>
+      </p>
+      <div class="color-options">
+        <div class="color-swatch active" style="background: #1a1a1a;" onclick="setColor(this, 'Midnight')" title="Midnight"></div>
+        <div class="color-swatch" style="background: #f0f0ed;" onclick="setColor(this, 'Starlight')" title="Starlight"></div>
+        <div class="color-swatch" style="background: #4a7c59;" onclick="setColor(this, 'Pear Green')" title="Pear Green"></div>
+        <div class="color-swatch" style="background: #8b6fd4;" onclick="setColor(this, 'Lavender')" title="Lavender"></div>
+      </div>
+
+      <!-- Quantity selector -->
+      <p style="font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; color: var(--text-muted);">Quantity</p>
+      <div class="quantity-selector">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <span class="qty-num" id="qty">1</span>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+      </div>
+
+      <!-- Buy buttons -->
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button class="btn btn-primary" onclick="handleAddToCart()" style="flex: 1;">
+          Add to Cart
+        </button>
+        <button class="btn btn-secondary" onclick="showToast('Saved to wishlist ♡')">
+          ♡ Wishlist
+        </button>
+      </div>
+
+      <!-- Reassurance strip -->
+      <div style="display: flex; gap: 24px; margin-top: 28px; flex-wrap: wrap;">
+        <div style="font-size: 0.8rem; color: var(--text-muted);">🚚 Free shipping</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">🔄 30-day returns</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">🛡️ 2-year warranty</div>
+      </div>
+
+      <!-- Specifications table -->
+      <div class="product-specs">
+        <h3>Specifications</h3>
+
+        <div class="spec-item">
+          <span class="spec-label">Battery Life</span>
+          <span>Up to 36 hours (with case)</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Noise Cancellation</span>
+          <span>Active (Adaptive ANC)</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Driver Size</span>
+          <span>11mm custom driver</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Connectivity</span>
+          <span>Bluetooth 5.3</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Water Resistance</span>
+          <span>IPX4</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">Weight</span>
+          <span>5.3g per earbud</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ── REVIEWS SECTION ── -->
+  <section class="reviews-section">
+    <div class="container">
+      <div class="reveal">
+        <p class="section-label">Reviews</p>
+        <h2 class="section-title">What people are saying</h2>
+      </div>
+
+      <div class="testimonials-grid" style="margin-top: 40px;">
+
+        <div class="review-card reveal reveal-delay-1">
+          <div class="review-header">
+            <div class="review-avatar">👤</div>
+            <div>
+              <p class="review-name">Marcus H.</p>
+              <p class="review-date">March 2025</p>
+            </div>
+            <div class="review-stars" style="margin-left: auto;">★★★★★</div>
+          </div>
+          <p class="review-text">"The ANC is next level. I wore these on a flight and forgot I was on a plane. The sound quality is genuinely better than some over-ear headphones I've tried."</p>
+        </div>
+
+        <div class="review-card reveal reveal-delay-2">
+          <div class="review-header">
+            <div class="review-avatar">👤</div>
+            <div>
+              <p class="review-name">Sophie L.</p>
+              <p class="review-date">February 2025</p>
+            </div>
+            <div class="review-stars" style="margin-left: auto;">★★★★★</div>
+          </div>
+          <p class="review-text">"The fit is perfect. I've used them for 4-hour sessions without any discomfort. Battery lasts longer than they claim. Genuinely impressed."</p>
+        </div>
+
+        <div class="review-card reveal reveal-delay-3">
+          <div class="review-header">
+            <div class="review-avatar">👤</div>
+            <div>
+              <p class="review-name">Daniel K.</p>
+              <p class="review-date">January 2025</p>
+            </div>
+            <div class="review-stars" style="margin-left: auto;">★★★★☆</div>
+          </div>
+          <p class="review-text">"Almost perfect. App could use some work but the hardware is absolutely elite. Would buy again without hesitation."</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── RELATED PRODUCTS ── -->
+  <section class="container">
+    <div class="reveal">
+      <p class="section-label">You might also like</p>
+      <h2 class="section-title" style="margin-bottom: 40px;">Related Products</h2>
+    </div>
+
+    <!-- Horizontally scrollable row of related products -->
+    <div class="related-strip reveal">
+      <a href="product.html" class="related-card">
+        <div class="related-img">🔊</div>
+        <div class="related-body">
+          <p class="related-name">Pear Speaker</p>
+          <p class="related-price">€149</p>
+        </div>
+      </a>
+      <a href="product.html" class="related-card">
+        <div class="related-img">⌚</div>
+        <div class="related-body">
+          <p class="related-name">Pear Watch</p>
+          <p class="related-price">€399</p>
+        </div>
+      </a>
+      <a href="product.html" class="related-card">
+        <div class="related-img">💻</div>
+        <div class="related-body">
+          <p class="related-name">PearBook Air</p>
+          <p class="related-price">€1,299</p>
+        </div>
+      </a>
+      <a href="product.html" class="related-card">
+        <div class="related-img">💳</div>
+        <div class="related-body">
+          <p class="related-name">MagWallet</p>
+          <p class="related-price">€49</p>
+        </div>
+      </a>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <p class="footer-brand-name">Pear 🍐</p>
+        <p class="footer-brand-text">Technology that feels human. Design that feels inevitable.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="products.html">All Products</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="cart.html">Cart</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pear Inc. All rights reserved.</p>
+      <p>Made with 🍐</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">✓ Added to cart</div>
+
+  <script>
+    // ── SCROLL REVEAL ────────────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ── CART ─────────────────────────────────────────────────
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('pear-cart') || '[]');
+      document.querySelectorAll('#cart-count').forEach(el => el.textContent = cart.length);
+    }
+    updateCartCount();
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = '✓ ' + message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // ── QUANTITY ─────────────────────────────────────────────
+    // qty starts at 1, can't go below 1
+    let qty = 1;
+    function changeQty(delta) {
+      qty = Math.max(1, qty + delta); // Math.max ensures minimum of 1
+      document.getElementById('qty').textContent = qty;
+    }
+
+    // ── ADD TO CART (with quantity) ──────────────────────────
+    function handleAddToCart() {
+      const cart = JSON.parse(localStorage.getItem('pear-cart') || '[]');
+      // Add multiple items based on qty
+      for (let i = 0; i < qty; i++) {
+        cart.push({ name: 'Pear Buds Pro', price: 249, id: Date.now() + i });
+      }
+      localStorage.setItem('pear-cart', JSON.stringify(cart));
+      updateCartCount();
+      showToast(`${qty}× Pear Buds Pro added to cart`);
+    }
+
+    // ── IMAGE GALLERY ────────────────────────────────────────
+    function setImage(thumb, emoji) {
+      // Update main image
+      document.getElementById('main-image').textContent = emoji;
+
+      // Remove active from all thumbs, add to clicked one
+      document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+    }
+
+    // ── COLOR PICKER ─────────────────────────────────────────
+    function setColor(swatch, colorName) {
+      document.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+      swatch.classList.add('active');
+
+      // Update the displayed color name
+      document.getElementById('color-label').textContent = colorName;
+    }
+
+    // ── NAV SCROLL ───────────────────────────────────────────
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      nav.style.boxShadow = window.scrollY > 60 ? '0 2px 20px rgba(0,0,0,0.08)' : 'none';
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Pear</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ── Timeline ──
+       Vertical timeline for company history
+       ─────────────────────────────────────────────────────── */
+    .timeline {
+      position: relative;
+      padding: 0 0 0 40px;
+      margin-top: 60px;
+    }
+
+    /* The vertical line running down the left */
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--border));
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 48px;
+    }
+
+    /* The dot on the timeline line */
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -36px;
+      top: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 3px solid var(--accent);
+      /* Pop-in animation using JS-added class */
+      transition: transform 0.4s ease, background 0.4s ease;
+    }
+
+    .timeline-item.visible::before {
+      background: var(--accent); /* filled dot when visible */
+      transform: scale(1.2);
+    }
+
+    .timeline-year {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .timeline-title {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+
+    .timeline-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 500px;
+    }
+
+    /* ── Values grid ── */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2px;     /* tiny gap creates grid lines look */
+      margin-top: 60px;
+      background: var(--border); /* shows through gaps as grid lines */
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .value-card {
+      background: var(--bg);
+      padding: 40px 32px;
+      transition: background var(--transition);
+    }
+    .value-card:hover { background: var(--accent-light); }
+
+    .value-num {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .value-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    .value-text {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── Mission statement ── */
+    .mission-block {
+      padding: 100px 5%;
+      text-align: center;
+      background: var(--text);
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Animated ring in background */
+    .mission-block::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border: 2px solid rgba(74,124,89,0.2);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      /* Rotate forever — subtle background animation */
+      animation: spin 30s linear infinite;
+    }
+
+    .mission-quote {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.4;
+      max-width: 800px;
+      margin: 0 auto 32px;
+      position: relative;
+    }
+
+    .mission-source {
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      position: relative;
+    }
+
+    /* ── Counter animation ──
+       Numbers count up when they enter viewport
+       ─────────────────────────────────────────────────────── */
+    .counting {
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <a href="index.html" class="nav-logo">Pear 🍐</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a href="cart.html" class="nav-cart" aria-label="View cart">
+      🛒
+      <span class="cart-count" id="cart-count">0</span>
+    </a>
+  </nav>
+
+
+  <!-- ── PAGE HERO ── -->
+  <div class="page-hero">
+    <h1>We build things<br /><em>worth keeping.</em></h1>
+    <p>A small team with an unreasonable obsession with quality.</p>
+  </div>
+
+
+  <!-- ── STORY SECTION ── -->
+  <section class="container">
+    <div class="about-story">
+
+      <!-- Left: image -->
+      <div class="about-story-img reveal">🍐</div>
+
+      <!-- Right: text -->
+      <div class="reveal reveal-delay-2">
+        <p class="section-label">Our Story</p>
+        <h2 class="section-title">Started in a garage.<br />Still feels like one.</h2>
+        <p style="color: var(--text-muted); line-height: 1.8; margin-top: 16px;">
+          Pear started in 2019 with a single question: why does great technology
+          have to feel so cold? We wanted to make products that felt like they were
+          designed by someone who actually uses them.
+        </p>
+        <p style="color: var(--text-muted); line-height: 1.8; margin-top: 16px;">
+          Five years later, we're still small on purpose. Every product is
+          reviewed by the same five people before it ships. We haven't lost
+          that yet, and we plan to never lose it.
+        </p>
+        <a href="products.html" class="btn btn-primary" style="margin-top: 32px;">See What We've Made</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── STATS ── -->
+  <section style="background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <div class="about-stat-grid reveal">
+
+        <!-- data-target = the number JS will count up to -->
+        <div>
+          <span class="about-stat-num counting" data-target="142000">0</span>
+          <span class="about-stat-label">Happy customers</span>
+        </div>
+        <div>
+          <span class="about-stat-num counting" data-target="18">0</span>
+          <span class="about-stat-label">Products shipped</span>
+        </div>
+        <div>
+          <span class="about-stat-num counting" data-target="5">0</span>
+          <span class="about-stat-label">Years of obsession</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── MISSION ── -->
+  <section class="mission-block">
+    <blockquote class="mission-quote reveal">
+      "We don't make products for people who want more. We make them for people who want better."
+    </blockquote>
+    <p class="mission-source reveal">— Pear, 2019</p>
+  </section>
+
+
+  <!-- ── TIMELINE ── -->
+  <section class="container">
+    <div class="reveal">
+      <p class="section-label">History</p>
+      <h2 class="section-title">How we got here</h2>
+    </div>
+
+    <div class="timeline">
+
+      <div class="timeline-item reveal">
+        <p class="timeline-year">2019</p>
+        <h3 class="timeline-title">The Garage</h3>
+        <p class="timeline-text">Three friends, one rented garage, and a question: what if tech felt human? First prototype of Pear Buds built on a kitchen table.</p>
+      </div>
+
+      <div class="timeline-item reveal">
+        <p class="timeline-year">2020</p>
+        <h3 class="timeline-title">First 100 Orders</h3>
+        <p class="timeline-text">We posted on one forum. Sold out in 4 hours. Packed every box by hand. Still remember each order number.</p>
+      </div>
+
+      <div class="timeline-item reveal">
+        <p class="timeline-year">2021</p>
+        <h3 class="timeline-title">Pear Watch</h3>
+        <p class="timeline-text">Spent 18 months on a single product. Launched to a waiting list of 40,000 people. Shipped to 80 countries in the first week.</p>
+      </div>
+
+      <div class="timeline-item reveal">
+        <p class="timeline-year">2023</p>
+        <h3 class="timeline-title">Carbon Neutral</h3>
+        <p class="timeline-text">Every product we've ever shipped, offset. Going forward, every product will be carbon negative before it leaves the warehouse.</p>
+      </div>
+
+      <div class="timeline-item reveal">
+        <p class="timeline-year">2025</p>
+        <h3 class="timeline-title">Still Going</h3>
+        <p class="timeline-text">142,000 customers. 18 products. Same five people reviewing everything before it ships. Nothing has changed that matters.</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ── VALUES ── -->
+  <section>
+    <div class="container">
+      <div class="reveal" style="text-align:center">
+        <p class="section-label">What We Believe</p>
+        <h2 class="section-title">The principles that drive us</h2>
+      </div>
+
+      <div class="values-grid">
+        <div class="value-card reveal">
+          <p class="value-num">01</p>
+          <h3 class="value-title">Honest Design</h3>
+          <p class="value-text">Form follows function, always. We never add something because it looks cool. We add it because it works.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-1">
+          <p class="value-num">02</p>
+          <h3 class="value-title">Made to Last</h3>
+          <p class="value-text">The most sustainable product is the one you don't need to replace. We build for decades, not product cycles.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-2">
+          <p class="value-num">03</p>
+          <h3 class="value-title">Radical Transparency</h3>
+          <p class="value-text">Our margins are public. Our manufacturing partners are named. Our mistakes are on our blog. No hiding here.</p>
+        </div>
+        <div class="value-card reveal reveal-delay-3">
+          <p class="value-num">04</p>
+          <h3 class="value-title">Small on Purpose</h3>
+          <p class="value-text">We could scale faster. We choose not to. Size is the enemy of taste, and taste is all we have.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── TEAM ── -->
+  <section class="container">
+    <div class="reveal" style="text-align:center">
+      <p class="section-label">The Team</p>
+      <h2 class="section-title">The people behind Pear</h2>
+    </div>
+
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-avatar">👩‍💻</div>
+        <p class="team-name">Aria Chen</p>
+        <p class="team-role">Founder & Design</p>
+      </div>
+      <div class="team-card reveal reveal-delay-1">
+        <div class="team-avatar">👨‍🔬</div>
+        <p class="team-name">Marco Ricci</p>
+        <p class="team-role">Engineering</p>
+      </div>
+      <div class="team-card reveal reveal-delay-2">
+        <div class="team-avatar">👩‍🎨</div>
+        <p class="team-name">Selin Yıldız</p>
+        <p class="team-role">Product & UX</p>
+      </div>
+      <div class="team-card reveal reveal-delay-3">
+        <div class="team-avatar">🧑‍💼</div>
+        <p class="team-name">James Park</p>
+        <p class="team-role">Operations</p>
+      </div>
+      <div class="team-card reveal reveal-delay-4">
+        <div class="team-avatar">👩‍🌾</div>
+        <p class="team-name">Nina Adler</p>
+        <p class="team-role">Sustainability</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ── CTA ── -->
+  <section class="cta-section">
+    <div class="reveal">
+      <p class="section-label" style="color: var(--accent)">Shop Pear</p>
+      <h2 class="section-title">Ready to see what obsession looks like?</h2>
+      <p class="section-sub">Every product, made with the same unreasonable care.</p>
+      <a href="products.html" class="btn btn-primary">Browse the Collection</a>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <p class="footer-brand-name">Pear 🍐</p>
+        <p class="footer-brand-text">Technology that feels human. Design that feels inevitable.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="products.html">All Products</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="cart.html">Cart</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pear Inc. All rights reserved.</p>
+      <p>Made with 🍐</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">✓ Done</div>
+
+  <script>
+    // ── SCROLL REVEAL ────────────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+
+    // ── COUNTER ANIMATION ────────────────────────────────────
+    // Makes numbers count up from 0 to their target value
+    // Uses IntersectionObserver so it starts when number is on screen
+
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          counterObserver.unobserve(entry.target); // only count up once
+        }
+      });
+    }, { threshold: 0.5 }); // trigger when 50% visible
+
+    document.querySelectorAll('.counting').forEach(el => counterObserver.observe(el));
+
+    function animateCounter(el) {
+      const target = parseInt(el.getAttribute('data-target')); // the final number
+      const duration = 2000; // 2 seconds
+      const step = target / (duration / 16); // how much to add each frame (60fps)
+      let current = 0;
+
+      // setInterval runs a function repeatedly
+      const timer = setInterval(() => {
+        current += step;
+
+        if (current >= target) {
+          current = target;
+          clearInterval(timer); // stop the interval when we reach the target
+        }
+
+        // Format large numbers with commas (e.g. 142,000)
+        el.textContent = Math.floor(current).toLocaleString();
+      }, 16); // 16ms ≈ 60fps
+    }
+
+
+    // ── CART COUNT ───────────────────────────────────────────
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('pear-cart') || '[]');
+      document.querySelectorAll('#cart-count').forEach(el => el.textContent = cart.length);
+    }
+    updateCartCount();
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // ── NAV SCROLL ───────────────────────────────────────────
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      nav.style.boxShadow = window.scrollY > 60 ? '0 2px 20px rgba(0,0,0,0.08)' : 'none';
+    });
+  </script>
+
+</body>
+</html>

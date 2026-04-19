@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pear — Think Different, Again</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVIGATION
+       position: fixed = stays at top as you scroll
+       The cart count updates via JavaScript
+       ============================================================ -->
+  <nav>
+    <a href="index.html" class="nav-logo">Pear 🍐</a>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+
+    <!-- Cart icon with item count badge -->
+    <a href="cart.html" class="nav-cart" aria-label="View cart">
+      🛒
+      <span class="cart-count" id="cart-count">0</span>
+    </a>
+  </nav>
+
+
+  <!-- ============================================================
+       HERO SECTION
+       The first thing people see — needs to be stunning.
+       The background orbs are pure CSS (::before and ::after on .hero)
+       ============================================================ -->
+  <section class="hero">
+    <p class="hero-eyebrow">Introducing Pear</p>
+
+    <h1>
+      Beautifully<br />
+      <em>crafted.</em><br />
+      Carefully made.
+    </h1>
+
+    <p class="hero-sub">
+      Technology that feels like it was designed for humans.
+      Because it was.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="products.html" class="btn btn-primary">Shop Now →</a>
+      <a href="about.html" class="btn btn-secondary">Our Story</a>
+    </div>
+
+    <!-- Scroll indicator — tells user to scroll down -->
+    <div class="scroll-indicator">
+      <p>Scroll</p>
+      <span></span> <!-- the animated line -->
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       MARQUEE STRIP
+       Scrolling text like Apple's feature bar.
+       The track is duplicated in HTML so the scroll looks seamless.
+       ============================================================ -->
+  <div class="marquee-section" aria-hidden="true">
+    <!-- Two identical sets of items so it loops without a jump -->
+    <div class="marquee-track">
+      <span class="marquee-item">Free Shipping <span>✦</span></span>
+      <span class="marquee-item">Lifetime Warranty <span>✦</span></span>
+      <span class="marquee-item">Handcrafted Quality <span>✦</span></span>
+      <span class="marquee-item">Carbon Neutral <span>✦</span></span>
+      <span class="marquee-item">Free Returns <span>✦</span></span>
+      <span class="marquee-item">Made to Last <span>✦</span></span>
+      <!-- Duplicate so it looks seamless when looping -->
+      <span class="marquee-item">Free Shipping <span>✦</span></span>
+      <span class="marquee-item">Lifetime Warranty <span>✦</span></span>
+      <span class="marquee-item">Handcrafted Quality <span>✦</span></span>
+      <span class="marquee-item">Carbon Neutral <span>✦</span></span>
+      <span class="marquee-item">Free Returns <span>✦</span></span>
+      <span class="marquee-item">Made to Last <span>✦</span></span>
+    </div>
+  </div>
+
+
+  <!-- ============================================================
+       FEATURED PRODUCTS SECTION
+       .reveal class = starts invisible, JS makes it visible on scroll
+       .reveal-delay-N = delays the animation slightly for stagger effect
+       ============================================================ -->
+  <section class="container">
+    <div class="reveal">
+      <p class="section-label">Our Collection</p>
+      <h2 class="section-title">Featured Products</h2>
+      <p class="section-sub">Each piece is designed with obsessive attention to detail — nothing is accidental.</p>
+    </div>
+
+    <div class="product-grid">
+
+      <!-- Product Card 1 -->
+      <div class="product-card reveal reveal-delay-1">
+        <div class="product-card-img">🎧</div>
+        <div class="product-card-body">
+          <p class="product-card-category">Audio</p>
+          <h3 class="product-card-name">Pear Buds Pro</h3>
+          <p class="product-card-desc">Studio-grade sound in the smallest package we've ever made.</p>
+          <div class="product-card-footer">
+            <span class="product-price">€249</span>
+            <button class="btn-add" onclick="addToCart('Pear Buds Pro', 249)" title="Add to cart">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 2 -->
+      <div class="product-card reveal reveal-delay-2">
+        <div class="product-card-img">⌚</div>
+        <div class="product-card-body">
+          <p class="product-card-category">Wearables</p>
+          <h3 class="product-card-name">Pear Watch Ultra</h3>
+          <p class="product-card-desc">Your health, your pace, your life — all from your wrist.</p>
+          <div class="product-card-footer">
+            <span class="product-price">€399</span>
+            <button class="btn-add" onclick="addToCart('Pear Watch Ultra', 399)" title="Add to cart">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Card 3 -->
+      <div class="product-card reveal reveal-delay-3">
+        <div class="product-card-img">💻</div>
+        <div class="product-card-body">
+          <p class="product-card-category">Computing</p>
+          <h3 class="product-card-name">PearBook Air</h3>
+          <p class="product-card-desc">So thin it doesn't feel real. So powerful it doesn't feel fair.</p>
+          <div class="product-card-footer">
+            <span class="product-price">€1,299</span>
+            <button class="btn-add" onclick="addToCart('PearBook Air', 1299)" title="Add to cart">+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Link to full products page -->
+    <div style="text-align:center; margin-top: 50px;" class="reveal">
+      <a href="products.html" class="btn btn-secondary">View All Products →</a>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FEATURES SECTION
+       Why people should choose Pear — mini value propositions
+       ============================================================ -->
+  <section style="background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+    <div class="container">
+      <div class="reveal" style="text-align:center">
+        <p class="section-label">Why Pear</p>
+        <h2 class="section-title">Designed for real life</h2>
+      </div>
+
+      <div class="features-grid">
+
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-icon">🌿</div>
+          <h3 class="feature-title">Sustainable First</h3>
+          <p class="feature-text">Every product is carbon-neutral and made with recycled materials. We care about the planet, not just profit.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-icon">🛡️</div>
+          <h3 class="feature-title">Built to Last</h3>
+          <p class="feature-text">Lifetime warranty on all Pear products. If it breaks, we fix it. No questions, no hassle.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-3">
+          <div class="feature-icon">✦</div>
+          <h3 class="feature-title">Obsessive Detail</h3>
+          <p class="feature-text">We spend months on things you'll never notice. That's exactly the point. Perfection lives in the invisible.</p>
+        </div>
+
+        <div class="feature-card reveal reveal-delay-4">
+          <div class="feature-icon">🚀</div>
+          <h3 class="feature-title">Free Worldwide Shipping</h3>
+          <p class="feature-text">Every order, everywhere. No minimums, no surprises. Because great products shouldn't have fine print.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       TESTIMONIALS SECTION
+       ============================================================ -->
+  <section class="container">
+    <div class="reveal" style="text-align:center">
+      <p class="section-label">Reviews</p>
+      <h2 class="section-title">People love Pear</h2>
+    </div>
+
+    <div class="testimonials-grid">
+
+      <div class="testimonial-card reveal reveal-delay-1">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"I opened the box and just stared. The packaging alone felt like unboxing something illegal."</p>
+        <p class="testimonial-author">— Mia K., Berlin</p>
+      </div>
+
+      <div class="testimonial-card reveal reveal-delay-2">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"The watch changed how I think about time. Sounds dramatic. It's not."</p>
+        <p class="testimonial-author">— Lucas R., Amsterdam</p>
+      </div>
+
+      <div class="testimonial-card reveal reveal-delay-3">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">"I've been an 'other brand' person my whole life. Not anymore. Pear just gets it."</p>
+        <p class="testimonial-author">— Zara T., London</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       CTA SECTION — Call to Action
+       The big closing section that invites people to buy
+       ============================================================ -->
+  <section class="cta-section">
+    <div class="reveal">
+      <p class="section-label" style="color: var(--accent)">The Pear Collection</p>
+      <h2 class="section-title">Start your story<br /><em>with Pear.</em></h2>
+      <p class="section-sub">Every product begins with a question: what would be perfect? Then we build that.</p>
+      <a href="products.html" class="btn btn-primary">Shop the Collection</a>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <p class="footer-brand-name">Pear 🍐</p>
+        <p class="footer-brand-text">Technology that feels human. Design that feels inevitable.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="products.html">All Products</a></li>
+          <li><a href="products.html">Audio</a></li>
+          <li><a href="products.html">Wearables</a></li>
+          <li><a href="products.html">Computing</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Sustainability</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Warranty</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 Pear Inc. All rights reserved.</p>
+      <p>Made with 🍐</p>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       TOAST NOTIFICATION
+       Hidden by default. JS shows it when item is added to cart.
+       ============================================================ -->
+  <div class="toast" id="toast">✓ Added to cart</div>
+
+
+  <!-- ============================================================
+       JAVASCRIPT
+       All the interactivity lives here
+       ============================================================ -->
+  <script>
+    // ── SCROLL REVEAL ANIMATION ──────────────────────────────
+    // IntersectionObserver watches elements and fires a callback
+    // when they enter/exit the viewport (visible area of screen)
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Element is now visible in viewport → add "visible" class
+          entry.target.classList.add('visible');
+          // Stop watching this element once it's shown (performance)
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.1,      // Trigger when 10% of element is visible
+      rootMargin: '0px 0px -50px 0px' // Trigger 50px before bottom of screen
+    });
+
+    // Watch all elements with class "reveal"
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+
+    // ── CART COUNTER ─────────────────────────────────────────
+    // localStorage = browser storage that persists between page loads
+    // JSON.parse converts stored text back to usable data
+
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('pear-cart') || '[]');
+      // Update all cart count badges on the page
+      document.querySelectorAll('#cart-count').forEach(el => {
+        el.textContent = cart.length;
+      });
+    }
+
+    // Run on page load
+    updateCartCount();
+
+
+    // ── ADD TO CART ──────────────────────────────────────────
+    // Called by each product card's "+" button
+
+    function addToCart(name, price) {
+      // Get existing cart from localStorage (or empty array if none)
+      const cart = JSON.parse(localStorage.getItem('pear-cart') || '[]');
+
+      // Add new item to the cart array
+      cart.push({ name, price, id: Date.now() }); // Date.now() = unique ID
+
+      // Save updated cart back to localStorage
+      localStorage.setItem('pear-cart', JSON.stringify(cart));
+
+      // Update the cart count badge
+      updateCartCount();
+
+      // Show the toast notification
+      showToast(`${name} added to cart`);
+    }
+
+
+    // ── TOAST NOTIFICATION ───────────────────────────────────
+    // Shows a little confirmation at the bottom of the screen
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = '✓ ' + message;
+      toast.classList.add('show');      // Makes it visible (CSS transition handles animation)
+
+      // Hide it again after 2.5 seconds
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+
+    // ── NAV BACKGROUND ON SCROLL ─────────────────────────────
+    // Adds a stronger shadow to nav when user scrolls down
+
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      if (window.scrollY > 60) {
+        nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.08)';
+      } else {
+        nav.style.boxShadow = 'none';
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products — Pear</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ── Filter Tabs ──
+       The category filter buttons at the top of the products page
+       ─────────────────────────────────────────────────────── */
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .filter-btn {
+      padding: 10px 24px;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      background: transparent;
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all var(--transition);
+      color: var(--text-muted);
+    }
+
+    /* Active/selected filter button */
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--text);
+      color: #fff;
+      border-color: var(--text);
+    }
+
+    /* Hidden product cards when filtered out */
+    .product-card.hidden {
+      display: none;
+    }
+
+    /* ── Search Box ── */
+    .search-wrap {
+      position: relative;
+      max-width: 360px;
+      margin-bottom: 40px;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      padding: 14px 20px 14px 46px;
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      background: var(--bg-card);
+      color: var(--text);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+
+    .search-wrap input:focus {
+      border-color: var(--accent); /* green border when focused */
+    }
+
+    /* Search icon inside input */
+    .search-wrap::before {
+      content: '🔍';
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      pointer-events: none; /* click goes through to the input */
+    }
+
+    /* "No results" message */
+    .no-results {
+      display: none;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+      grid-column: 1 / -1; /* spans all columns */
+    }
+    .no-results.show { display: block; }
+    .no-results h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION (same on every page) -->
+  <nav>
+    <a href="index.html" class="nav-logo">Pear 🍐</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="products.html">Products</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <a href="cart.html" class="nav-cart" aria-label="View cart">
+      🛒
+      <span class="cart-count" id="cart-count">0</span>
+    </a>
+  </nav>
+
+
+  <!-- ── Page Hero ── -->
+  <div class="page-hero">
+    <h1>The Collection</h1>
+    <p>Every product built around one question: what would be perfect?</p>
+  </div>
+
+
+  <!-- ── Products Section ── -->
+  <section class="container">
+
+    <!-- Search box — filters products by name as you type -->
+    <div class="search-wrap">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Search products..."
+        oninput="filterProducts()"
+      />
+    </div>
+
+    <!-- Filter category buttons -->
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="setFilter('all', this)">All</button>
+      <button class="filter-btn" onclick="setFilter('audio', this)">Audio</button>
+      <button class="filter-btn" onclick="setFilter('wearables', this)">Wearables</button>
+      <button class="filter-btn" onclick="setFilter('computing', this)">Computing</button>
+      <button class="filter-btn" onclick="setFilter('accessories', this)">Accessories</button>
+    </div>
+
+    <!-- Product grid
+         data-category = custom attribute used by the JS filter
+         data-name = used by the search filter -->
+    <div class="product-grid" id="product-grid">
+
+      <div class="product-card reveal reveal-delay-1" data-category="audio" data-name="pear buds pro">
+        <div class="product-card-img">🎧</div>
+        <div class="product-card-body">
+          <p class="product-card-category">Audio</p>
+          <h3 class="product-card-name">Pear Buds Pro</h3>
+          <p class="product-card-desc">Active noise cancellation that actually works. 36-hour battery. Studio sound.</p>
+          <div class="product-card-footer">
+            <span class="product-price">€249</span>
+            <div style="display:flex; gap:8px;">
+              <a href="product.html" class="btn btn-secondary" style="padding: 8px 16px; font-size:0.8rem;">Details</a>
+              <button class="btn-add" onclick="addToCart('Pear Buds Pro', 249)" title="Add to cart">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-2" data-category="wearables" data-name="pear watch ultra">
+        <div class="product-card-img">⌚</div>
+        <div class="product-card-body">
+          <p class="product-card-category">Wearables</p>
+          <h3 class="product-card-name">Pear Watch Ultra</h3>
+          <p class="product-card-desc">Health tracking so advanced it's almost unsettling. In a good way.</p>
+          <div class="product-card-footer">
+            <span class="product-price">€399</span>
+            <div style="display:flex; gap:8px;">
+              <a href="product.html" class="btn btn-secondary" style="padding: 8px 16px; font-size:0.8rem;">Details</a>
+              <button class="btn-add" onclick="addToCart('Pear Watch Ultra', 399)" title="Add to cart">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-3" data-category="computing" data-name="pearbook air">
+        <div class="product-card-img">💻</div>
+        <div class="product-card-body">
+          <p class="product-card-category">Computing</p>
+          <h3 class="product-card-name">PearBook Air</h3>
+          <p class="product-card-desc">Weighs nothing. Does everything. The laptop you didn't know you needed.</p>
+          <div class="product-card-footer">
+            <span class="product-price">€1,299</span>
+            <div style="display:flex; gap:8px;">
+              <a href="product.html" class="btn btn-secondary" style="padding: 8px 16px; font-size:0.8rem;">Details</a>
+              <button class="btn-add" onclick="addToCart('PearBook Air', 1299)" title="Add to cart">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-1" data-category="audio" data-name="pear speaker mini">
+        <div class="product-card-img">🔊</div>
+        <div class="product-card-body">
+          <p class="product-card-category">Audio</p>
+          <h3 class="product-card-name">Pear Speaker Mini</h3>
+          <p class="product-card-desc">Sounds like a concert. Fits in your bag. Water resistant.</p>
+          <div class="product-card-footer">
+            <span class="product-price">€149</span>
+            <div style="display:flex; gap:8px;">
+              <a href="product.html" class="btn btn-secondary" style="padding: 8px 16px; font-size:0.8rem;">Details</a>
+              <button class="btn-add" onclick="addToCart('Pear Speaker Mini', 149)" title="Add to cart">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-2" data-category="accessories" data-name="pear magsafe wallet">
+        <div class="product-card-img">💳</div>
+        <div class="product-card-body">
+          <p class="product-card-category">Accessories</p>
+          <h3 class="product-card-name">Pear MagWallet</h3>
+          <p class="product-card-desc">Magnetically attaches to your device. Holds 3 cards. Vegan leather.</p>
+          <div class="product-card-footer">
+            <span class="product-price">€49</span>
+            <div style="display:flex; gap:8px;">
+              <a href="product.html" class="btn btn-secondary" style="padding: 8px 16px; font-size:0.8rem;">Details</a>
+              <button class="btn-add" onclick="addToCart('Pear MagWallet', 49)" title="Add to cart">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card reveal reveal-delay-3" data-category="wearables" data-name="pear ring">
+        <div class="product-card-img">💍</div>
+        <div class="product-card-body">
+          <p class="product-card-category">Wearables</p>
+          <h3 class="product-card-name">Pear Ring</h3>
+          <p class="product-card-desc">Sleep tracking, heart rate, steps — in a ring. Titanium. Waterproof.</p>
+          <div class="product-card-footer">
+            <span class="product-price">€299</span>
+            <div style="display:flex; gap:8px;">
+              <a href="product.html" class="btn btn-secondary" style="padding: 8px 16px; font-size:0.8rem;">Details</a>
+              <button class="btn-add" onclick="addToCart('Pear Ring', 299)" title="Add to cart">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No results message (shown by JS when search returns nothing) -->
+      <div class="no-results" id="no-results">
+        <h3>Nothing found 🍐</h3>
+        <p>Try a different search term.</p>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <p class="footer-brand-name">Pear 🍐</p>
+        <p class="footer-brand-text">Technology that feels human. Design that feels inevitable.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="products.html">All Products</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="cart.html">Cart</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Pear Inc. All rights reserved.</p>
+      <p>Made with 🍐</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast">✓ Added to cart</div>
+
+  <script>
+    // ── SCROLL REVEAL ────────────────────────────────────────
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+
+    // ── CART COUNT ───────────────────────────────────────────
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem('pear-cart') || '[]');
+      document.querySelectorAll('#cart-count').forEach(el => el.textContent = cart.length);
+    }
+    updateCartCount();
+
+
+    // ── ADD TO CART ──────────────────────────────────────────
+    function addToCart(name, price) {
+      const cart = JSON.parse(localStorage.getItem('pear-cart') || '[]');
+      cart.push({ name, price, id: Date.now() });
+      localStorage.setItem('pear-cart', JSON.stringify(cart));
+      updateCartCount();
+      showToast(`${name} added to cart`);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = '✓ ' + message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+
+    // ── CATEGORY FILTER ──────────────────────────────────────
+    // currentFilter tracks which category is active
+    let currentFilter = 'all';
+    let currentSearch = '';
+
+    function setFilter(category, btn) {
+      currentFilter = category;
+
+      // Remove "active" from all buttons, add to clicked one
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      applyFilters();
+    }
+
+
+    // ── SEARCH FILTER ────────────────────────────────────────
+    function filterProducts() {
+      // Get search value and convert to lowercase for case-insensitive match
+      currentSearch = document.getElementById('search-input').value.toLowerCase();
+      applyFilters();
+    }
+
+
+    // ── APPLY BOTH FILTERS ───────────────────────────────────
+    // Runs every time category or search changes
+    function applyFilters() {
+      const cards = document.querySelectorAll('.product-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        const name = card.getAttribute('data-name');
+
+        // Check if card passes both filters
+        const matchCategory = currentFilter === 'all' || category === currentFilter;
+        const matchSearch = name.includes(currentSearch);
+
+        if (matchCategory && matchSearch) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // Show "no results" message if nothing matches
+      const noResults = document.getElementById('no-results');
+      noResults.classList.toggle('show', visibleCount === 0);
+    }
+
+
+    // ── NAV SCROLL ───────────────────────────────────────────
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('nav');
+      nav.style.boxShadow = window.scrollY > 60 ? '0 2px 20px rgba(0,0,0,0.08)' : 'none';
+    });
+  </script>
+
+</body>
+</html>
